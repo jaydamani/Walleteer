@@ -24,8 +24,8 @@ export default function RootNavigator() {
           {screens.map((screen) => (
             <Drawer.Screen
               key={screen.name}
-              name={screen.name}
-              component={() => <screen.component />}
+              {...screen}
+              component={() => <screen.Component />}
             />
           ))}
         </Drawer.Navigator>
