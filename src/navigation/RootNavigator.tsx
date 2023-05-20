@@ -12,9 +12,9 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { screens } from "../screens";
+import { screens } from "@Screens";
 import { useState } from "react";
-import { ThemeContext } from "../contexts/settings";
+import { ThemeContext } from "@Context/settings";
 
 function DrawerContent({
   state,

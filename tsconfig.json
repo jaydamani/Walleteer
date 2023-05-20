@@ -4,8 +4,9 @@
     "baseUrl": "./src",
     "paths": {
       "@Navigation/*": ["./navigation/*"],
-      "@Context/*": ["src/contexts/*"],
-      "@Screens/*": ["src/screens/*"],
+      "@Components": ["./components"],
+      "@Context/*": ["./contexts/*"],
+      "@Screens": ["./screens"],
       // "@Stores/*": ["src/stores/*"],
       "@Assets/*": ["../assets/*"]
     }
