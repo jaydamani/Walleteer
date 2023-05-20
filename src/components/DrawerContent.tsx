@@ -1,23 +1,26 @@
 import {
   DrawerContentComponentProps,
-  DrawerItemList
+  DrawerItemList,
 } from "@react-navigation/drawer";
 import {
   SafeAreaView,
-  useSafeAreaInsets
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
 export function DrawerContent({
-  state, navigation, descriptors,
+  state,
+  navigation,
+  descriptors,
 }: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
   return (
-    <SafeAreaView style={[{ paddingTop: insets.top + 10 }]}>
-      <SafeAreaView style={{ height: 150 }}></SafeAreaView>
+    <SafeAreaView>
+      {/* <SafeAreaView style={{ height: 150 }} /> */}
       <DrawerItemList
         state={state}
         navigation={navigation}
-        descriptors={descriptors} />
+        descriptors={descriptors}
+      />
     </SafeAreaView>
   );
 }
