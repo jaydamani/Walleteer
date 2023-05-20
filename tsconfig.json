@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "module": "ES2022",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      // "@Navigation/*": ["src/navigation/*"],
-      // "@Components/*": ["src/components/*"],
-      // "@Screens/*": ["src/screens/*"],
+      "@Navigation/*": ["./navigation/*"],
+      "@Context/*": ["src/contexts/*"],
+      "@Screens/*": ["src/screens/*"],
       // "@Stores/*": ["src/stores/*"],
-      // "@Assets/*": ["assets/*"]
+      "@Assets/*": ["../assets/*"]
     }
   },
   "extends": "expo/tsconfig.base"
