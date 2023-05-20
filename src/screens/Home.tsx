@@ -3,7 +3,8 @@ import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { useContext } from "react";
 import { Button, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext } from "../contexts/settings";
+import { ThemeContext } from "@Context/settings";
+import { MainText } from "@Components";
 
 export function Home({ navigation, route }) {
   const Tab = createMaterialTopTabNavigator();
@@ -25,13 +26,13 @@ export function Home({ navigation, route }) {
         <Tab.Screen
           name="Test2"
           component={() => (
-            <Text style={{ color: theme.colors.text }}>test</Text>
+            <MainText >test</MainText>
           )}
         />
         <Tab.Screen
           name="Test3"
           component={() => (
-            <Text style={{ color: theme.colors.text }}>test</Text>
+            <MainText >test</MainText>
           )}
         />
       </Tab.Navigator>
