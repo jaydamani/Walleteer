@@ -13,6 +13,8 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { screens } from "../screens";
+import { useState } from "react";
+import { ThemeContext } from "../contexts/settings";
 
 function DrawerContent({
   state,
@@ -32,28 +34,26 @@ function DrawerContent({
   );
 }
 
-export default function RootNavigator({ isDark, setTheme }) {
+export default function RootNavigator() {
   const Drawer = createDrawerNavigator();
+  const [theme, setTheme] = useState(DarkTheme);
   return (
-    <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
-      <Drawer.Navigator
-        screenOptions={{}}
-        initialRouteName="Home"
-        drawerContent={DrawerContent}
-      >
-        {screens.map((screen) => (
-          <Drawer.Screen
-            key={screen.name}
-            name={screen.name}
-            initialParams={{
-              isDark,
-              setTheme,
-            }}
-          >
-            {() => <screen.component isDark={isDark} setTheme={setTheme}/>}
-          </Drawer.Screen>
-        ))}
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <NavigationContainer theme={theme}>
+        <Drawer.Navigator
+          screenOptions={{}}
+          initialRouteName="Home"
+          drawerContent={DrawerContent}
+        >
+          {screens.map((screen) => (
+            <Drawer.Screen
+              key={screen.name}
+              name={screen.name}
+              component={() => <screen.component />}
+            />
+          ))}
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </ThemeContext.Provider>
   );
 }
