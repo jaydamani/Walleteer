@@ -13,7 +13,7 @@ module.exports = function (api) {
             "@Components": "./src/components",
             "@Context": "./src/contexts",
             "@Screens": "./src/screens",
-            // "@Stores": "./src/stores",
+            "@Styles": "./src/styles",
             "@Assets": "./assets",
           },
           extensions: [".js", ".jsx", ".ts", ".tsx"],
