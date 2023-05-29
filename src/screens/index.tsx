@@ -3,14 +3,15 @@ import { ComponentType } from "react";
 import * as Home from "./Home";
 import { DrawerProps } from "@react-navigation/drawer/lib/typescript/src/types";
 
-interface screen {
+interface Screen {
   name: string;
   Component: ComponentType<DrawerProps & any>;
   options?: DrawerNavigationOptions;
 }
 
-export const screens: screen[] = [
+export const screens: Screen[] = [
   {
-    name: "Homie", ...Home
+    name: "Home",
+    ...Home,
   },
 ];
