@@ -1,29 +1,15 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { DarkTheme, DefaultTheme } from "@react-navigation/native";
-import { useContext } from "react";
-import { Button } from "react-native";
-import { ThemeContext } from "@Context/settings";
-import { MainText } from "@Components";
+import { MainText, TransactionList } from "@Components";
 import { DrawerNavigationOptions } from "@react-navigation/drawer";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "@expo/vector-icons/FontAwesome5";
 
 export const options: DrawerNavigationOptions = {
   headerTitle: "Home",
-  drawerIcon: ({ color }) => <Icon name="home" size={24} color={color} />,
+  drawerIcon: (props) => <Icon name="home" {...props} />,
 };
 
-function Butt({}) {
-  const { setTheme, theme } = useContext(ThemeContext);
-  return (
-    <Button
-      title={"Test"}
-      onPress={() => setTheme(theme == DefaultTheme ? DarkTheme : DefaultTheme)}
-    ></Button>
-  );
-}
-
 function Tex({}) {
-  return <MainText>test</MainText>;
+  return <MainText>Nothing to see here mate</MainText>;
 }
 
 export function Component({ navigation, route }) {
@@ -37,9 +23,8 @@ export function Component({ navigation, route }) {
         },
       }}
     >
-      <Tab.Screen name="Test1" component={Butt} />
-      <Tab.Screen name="Test2" component={Tex} />
-      <Tab.Screen name="Test3" component={Tex} />
+      <Tab.Screen name="Transactions" component={TransactionList} options={{}} />
+      <Tab.Screen name="Transfers" component={Tex} />
     </Tab.Navigator>
   );
 }
