@@ -7,7 +7,7 @@ import { Provider } from "react-native-paper";
 function App() {
   return (
     <SafeAreaProvider>
-        <RootNavigator />
+      <RootNavigator />
     </SafeAreaProvider>
   );
 }

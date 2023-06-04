@@ -4,7 +4,7 @@ import { screens } from "@Screens";
 import { useState } from "react";
 import { ThemeContext } from "@Context/settings";
 import { DrawerContent } from "@Components";
-import { Provider} from "react-native-paper";
+import { Provider } from "react-native-paper";
 import { CombinedDarkTheme } from "@Styles/themes";
 
 export default function RootNavigator() {

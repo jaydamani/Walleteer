@@ -18,11 +18,11 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 });
 
 const fontConfig: Partial<MD3Type> = {
-    fontFamily: Platform.select({
-      web: 'Roboto, "Helvetica Neue", Arial, sans-serif',
-      ios: "System",
-      default: "sans-serif",
-    }),
+  fontFamily: Platform.select({
+    web: 'Roboto, "Helvetica Neue", Arial, sans-serif',
+    ios: "System",
+    default: "sans-serif",
+  }),
 };
 
 type theme = MD3Theme;

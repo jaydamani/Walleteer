@@ -23,7 +23,11 @@ export function Component({ navigation, route }) {
         },
       }}
     >
-      <Tab.Screen name="Transactions" component={TransactionList} options={{}} />
+      <Tab.Screen
+        name="Transactions"
+        component={TransactionList}
+        options={{}}
+      />
       <Tab.Screen name="Transfers" component={Tex} />
     </Tab.Navigator>
   );
