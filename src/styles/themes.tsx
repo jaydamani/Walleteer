@@ -1,6 +1,7 @@
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
+  Theme as NavigationTheme,
 } from "@react-navigation/native";
 import { Platform } from "react-native";
 import {
@@ -25,7 +26,7 @@ const fontConfig: Partial<MD3Type> = {
   }),
 };
 
-type theme = MD3Theme;
+type theme = MD3Theme & NavigationTheme;
 export const CombinedLightTheme: theme = {
   ...MD3LightTheme,
   ...LightTheme,
