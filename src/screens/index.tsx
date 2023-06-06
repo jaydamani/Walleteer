@@ -1,7 +1,8 @@
 import { DrawerNavigationOptions } from "@react-navigation/drawer";
-import { ComponentType } from "react";
-import * as Home from "./Home";
 import { DrawerProps } from "@react-navigation/drawer/lib/typescript/src/types";
+import { ComponentType } from "react";
+
+import * as Home from "./Home";
 
 interface Screen {
   name: string;

@@ -1,11 +1,11 @@
+import { DrawerContent } from "@Components";
+import { ThemeContext } from "@Context/settings";
+import { screens } from "@Screens";
+import { CombinedDarkTheme } from "@Styles/themes";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
-import { screens } from "@Screens";
 import { useState } from "react";
-import { ThemeContext } from "@Context/settings";
-import { DrawerContent } from "@Components";
 import { Provider } from "react-native-paper";
-import { CombinedDarkTheme } from "@Styles/themes";
 
 export default function RootNavigator() {
   const Drawer = createDrawerNavigator();
