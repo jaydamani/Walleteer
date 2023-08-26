@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "module": "ESNext",
+    "baseUrl": ".",
+    "paths": {
+      "@Navigation/*": ["./src/navigation/*"],
+      "@Components": ["src/components"],
+      "@database": ["src/database"],
+      "@models/*": ["src/database/model/*"],
+      "@Screens": ["./src/screens"],
+      "@Assets/*": ["./assets/*"],
+      "@lib/*": ["./src/lib/*"]
+    },
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
+  },
+  "extends": "@tsconfig/react-native/tsconfig.json"
+}
