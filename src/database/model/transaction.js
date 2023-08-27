@@ -14,11 +14,17 @@ export const TransactionSchema = tableSchema({
 
 export class Transaction extends Model {
   static table = 'transactions';
+  /**
+   * @type {string}
+   */
   @text('title') title;
   /**
    * @type {Date}
    */
   @date('done_at') date;
+  /**
+   * @type {number}
+   */
   @field('amount') amount;
   @text('icon') icon;
   /**
