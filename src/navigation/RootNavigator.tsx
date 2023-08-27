@@ -1,31 +1,30 @@
-import { DrawerContent } from '@Components';
-import { screens } from '@Screens';
 import { useNavTheme } from '@lib/theme';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
+import { DrawerList, DrawerNavigator } from './DrawerNavigator';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { TransactionForm } from '@Components';
+
 export default function RootNavigator() {
-  const Drawer = createDrawerNavigator();
   const theme = useNavTheme();
+  const Stack = createNativeStackNavigator<RootScreens>();
   return (
     <NavigationContainer theme={theme}>
-      <Drawer.Navigator
-        screenOptions={{
-          headerStyle: {
-            borderBottomWidth: 0,
-            shadowColor: 'transparent',
-          },
-        }}
-        initialRouteName="Home"
-        drawerContent={DrawerContent}>
-        {screens.map(screen => (
-          <Drawer.Screen
-            key={screen.name}
-            {...screen}
-            component={screen.Component}
-          />
-        ))}
-      </Drawer.Navigator>
+      <Stack.Navigator>
+        <Stack.Group screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="root" component={DrawerNavigator} />
+        </Stack.Group>
+        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+          <Stack.Screen name="transactionForm" component={TransactionForm} />
+        </Stack.Group>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+export type RootScreens = {
+  transactionForm: undefined;
+  root: undefined;
+};
+
+export type Screens = RootScreens & DrawerList;
