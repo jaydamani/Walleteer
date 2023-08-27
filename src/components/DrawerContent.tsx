@@ -2,7 +2,8 @@ import {
   DrawerContentComponentProps,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
+import { View } from 'react-native-ui-lib';
 
 export function DrawerContent({
   state,
@@ -10,13 +11,19 @@ export function DrawerContent({
   descriptors,
 }: DrawerContentComponentProps) {
   return (
-    <SafeAreaView>
-      {/* <SafeAreaView style={{ height: 150 }} /> */}
+    <>
+      <View style={styles.topContainer} />
       <DrawerItemList
         state={state}
         navigation={navigation}
         descriptors={descriptors}
       />
-    </SafeAreaView>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  topContainer: {
+    height: 150,
+  },
+});
