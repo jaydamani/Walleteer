@@ -5,22 +5,22 @@ import {
   SectionList,
   StyleSheet,
   ListRenderItemInfo,
-  View,
+  Dimensions,
 } from 'react-native';
-import { Text, List } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TransactionIcon } from './TransactionIcon';
+import { ListItem, Text } from 'react-native-ui-lib';
 
 export interface TransactionListProps {
-  transactions: readonly Transaction[];
+  transactionList: readonly Transaction[];
 }
 
-function TransactionList({ transactions }: TransactionListProps) {
+function TransactionList({ transactionList }: TransactionListProps) {
   const sections: { data: Transaction[]; title: string }[] = [];
-  if (transactions.length) {
+  if (transactionList.length) {
     let lastTitle;
-    for (const t of transactions) {
+    for (const t of transactionList) {
       const title = t.date.toLocaleString('default', {
         month: 'short',
         year: 'numeric',
@@ -34,20 +34,20 @@ function TransactionList({ transactions }: TransactionListProps) {
   }
 
   return (
-    <View style={styles.container}>
-      <SectionList
-        sections={sections}
-        // stickySectionHeadersEnabled
-        keyExtractor={t => t.id}
-        renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-        renderItem={renderTransactionListItem}
-        getItemLayout={(_, index) => ({
-          index,
-          length: 360,
-          offset: 69 * index,
-        })}
-      />
-    </View>
+    <SectionList
+      sections={sections}
+      // stickySectionHeadersEnabled
+      keyExtractor={t => t.id}
+      renderSectionHeader={({ section }) => (
+        <Text style={styles.listItem}>{section.title}</Text>
+      )}
+      renderItem={renderTransactionListItem}
+      getItemLayout={(_, index) => ({
+        index,
+        length: Dimensions.get('screen').width,
+        offset: 72 * index,
+      })}
+    />
   );
 }
 
@@ -59,29 +59,31 @@ export function renderTransactionListItem({
   }
 
   return (
-    <List.Item
-      title={item.title}
-      left={props => <TransactionIcon {...props} transaction={item} />}
-      right={() => (
+    <ListItem onPress={onPress}>
+      <ListItem.Part left containerStyle={styles.listItem}>
+        <TransactionIcon size={40} transaction={item} />
+      </ListItem.Part>
+      <ListItem.Part middle column containerStyle={styles.listItem}>
+        <Text primary>{item.title}</Text>
+        <Text secondary>{item.description}</Text>
+      </ListItem.Part>
+      <ListItem.Part
+        right
+        containerStyle={(styles.listItem, { marginRight: 24 })}>
         <Feather
-          style={[
-            styles.rightAlign,
-            item.amount > 0 ? styles.positiveAmount : styles.negativeAmount,
-          ]}
-          name="plus">
+          style={[item.amount > 0 ? styles.positive : styles.negative]}
+          name={item.amount > 0 ? 'plus' : 'minus'}>
           {Math.abs(item.amount)}
         </Feather>
-      )}
-      description={item.description}
-      onPress={onPress}
-    />
+      </ListItem.Part>
+    </ListItem>
   );
 }
 
 const enhance = withObservables([], () => {
   console.log('queried');
   return {
-    transactions: transactions.query(Q.sortBy('done_at', Q.desc)),
+    transactionList: transactions.query(Q.sortBy('done_at', Q.desc)),
   };
 });
 
@@ -89,19 +91,19 @@ const enhancedTransactionList = enhance(TransactionList);
 export { enhancedTransactionList as TransactionList };
 
 export const styles = StyleSheet.create({
-  container: {
-    paddingLeft: 10,
-  },
   rightAlign: {
     textAlign: 'right',
   },
-  negativeAmount: {
+  negative: {
     color: 'red',
   },
-  positiveAmount: {
+  positive: {
     color: 'green',
   },
   header: {
     backgroundColor: 'black',
+  },
+  listItem: {
+    marginLeft: 16,
   },
 });
