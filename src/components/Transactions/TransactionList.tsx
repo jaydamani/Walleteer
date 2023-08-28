@@ -11,6 +11,8 @@ import Feather from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TransactionIcon } from './TransactionIcon';
 import { ListItem, Text } from 'react-native-ui-lib';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { Screens } from '@Navigation/RootNavigator';
 
 export interface TransactionListProps {
   transactionList: readonly Transaction[];
@@ -41,7 +43,7 @@ function TransactionList({ transactionList }: TransactionListProps) {
       renderSectionHeader={({ section }) => (
         <Text style={styles.listItem}>{section.title}</Text>
       )}
-      renderItem={renderTransactionListItem}
+      renderItem={TransactionListItem}
       getItemLayout={(_, index) => ({
         index,
         length: Dimensions.get('screen').width,
@@ -51,11 +53,10 @@ function TransactionList({ transactionList }: TransactionListProps) {
   );
 }
 
-export function renderTransactionListItem({
-  item,
-}: ListRenderItemInfo<Transaction>) {
+export function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
+  const navigation = useNavigation<NavigationProp<Screens>>();
   function onPress() {
-    return console.log('Form SoonTM');
+    return navigation.navigate('transactionForm', { transaction: item.id });
   }
 
   return (

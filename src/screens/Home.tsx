@@ -16,7 +16,7 @@ export const homeScreenOptions: DrawerNavigationOptions = {
 
 export function Home({ navigation }: DrawerScreenProps<Screens, 'Home'>) {
   function createTransaction() {
-    navigation.navigate('transactionForm');
+    navigation.navigate('transactionForm', {});
   }
   return (
     <View style={styles.container}>

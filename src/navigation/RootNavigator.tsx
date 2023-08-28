@@ -3,7 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { DrawerList, DrawerNavigator } from './DrawerNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { TransactionForm } from '@Components';
+import {
+  TransactionForm,
+  getTransactionFormOptions,
+} from '@Screens/TransactionForm';
 
 export default function RootNavigator() {
   const theme = useNavTheme();
@@ -15,7 +18,11 @@ export default function RootNavigator() {
           <Stack.Screen name="root" component={DrawerNavigator} />
         </Stack.Group>
         <Stack.Group screenOptions={{ presentation: 'modal' }}>
-          <Stack.Screen name="transactionForm" component={TransactionForm} />
+          <Stack.Screen
+            name="transactionForm"
+            component={TransactionForm}
+            options={getTransactionFormOptions}
+          />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
@@ -23,7 +30,9 @@ export default function RootNavigator() {
 }
 
 export type RootScreens = {
-  transactionForm: undefined;
+  transactionForm: {
+    transaction?: string;
+  };
   root: undefined;
 };
 

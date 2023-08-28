@@ -9,6 +9,7 @@ module.exports = {
     'no-undef': 'off',
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': 'warn',
+    curly: 'off',
   },
   extends: '@react-native',
 };
