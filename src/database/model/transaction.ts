@@ -1,5 +1,6 @@
-import { Model, tableSchema } from '@nozbe/watermelondb';
+import { Model, Relation, tableSchema } from '@nozbe/watermelondb';
 import { date, field, relation, text } from '@nozbe/watermelondb/decorators';
+import { Category } from './categories';
 
 export const TransactionSchema = tableSchema({
   name: 'transactions',
@@ -14,23 +15,12 @@ export const TransactionSchema = tableSchema({
 
 export class Transaction extends Model {
   static table = 'transactions';
-  /**
-   * @type {string}
-   */
-  @text('title') title;
-  /**
-   * @type {Date}
-   */
-  @date('done_at') date;
-  /**
-   * @type {number}
-   */
-  @field('amount') amount;
-  @text('icon') icon;
-  /**
-   * @type {Relation<Category>}
-   */
-  @relation('transaction_categories', 'category_id') category;
+  @text('title') title!: string;
+  @date('done_at') date!: Date;
+  @field('amount') amount!: number;
+  @text('icon') icon!: string;
+  @relation('transaction_categories', 'category_id')
+  category!: Relation<Category>;
 
   get description() {
     return this.date.toDateString();

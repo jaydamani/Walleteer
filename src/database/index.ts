@@ -13,7 +13,7 @@ export const database = new Database({
 export function setupDB() {
   return database.write(async () => {
     try {
-      await createCategories(database);
+      await createCategories();
     } catch (error) {
       throw error;
     }

@@ -8,5 +8,5 @@ export const CategorySchema = tableSchema({
 
 export class Category extends Model {
   static table = 'categories';
-  @text('title') title;
+  @text('title') title!: string;
 }
