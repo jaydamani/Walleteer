@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { View } from 'react-native-ui-lib';
+import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import '@lib/theme';
 import { Screens } from '@Navigation/RootNavigator';

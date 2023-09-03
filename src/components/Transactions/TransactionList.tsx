@@ -2,9 +2,9 @@ import { Transaction, transactions } from '@database';
 import { Q } from '@nozbe/watermelondb';
 import { SectionList, Dimensions } from 'react-native';
 
-import { Text } from 'react-native-ui-lib';
 import { useEffect, useState } from 'react';
 import { TransactionListItem } from './TransactionListItem';
+import { List } from 'react-native-paper';
 
 export interface TransactionListProps {
   queries?: Q.Clause[];
@@ -45,7 +45,9 @@ export function TransactionList({ queries = [] }: TransactionListProps) {
       sections={list}
       // stickySectionHeadersEnabled
       keyExtractor={t => t.id}
-      renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+      renderSectionHeader={({ section }) => (
+        <List.Subheader>{section.title}</List.Subheader>
+      )}
       renderItem={TransactionListItem}
       getItemLayout={(_, index) => ({
         index,

@@ -1,10 +1,14 @@
 import { Transaction } from '@database';
-import { ListRenderItemInfo, StyleSheet } from 'react-native';
-import Feather from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  ListRenderItemInfo,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+} from 'react-native';
 import { TransactionIcon } from './TransactionIcon';
-import { ListItem, Text } from 'react-native-ui-lib';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Screens } from '@Navigation/RootNavigator';
+import { List, Text } from 'react-native-paper';
 
 export function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
   const navigation = useNavigation<NavigationProp<Screens>>();
@@ -13,31 +17,36 @@ export function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
   }
 
   return (
-    <ListItem onPress={onPress}>
-      <ListItem.Part left containerStyle={styles.listItem}>
-        <TransactionIcon size={40} transaction={item} />
-      </ListItem.Part>
-      <ListItem.Part middle column containerStyle={styles.listItem}>
-        <Text primary>{item.title}</Text>
-        <Text secondary>{item.description}</Text>
-      </ListItem.Part>
-      <ListItem.Part
-        right
-        containerStyle={(styles.listItem, { marginRight: 24 })}>
-        <Feather
-          style={[item.amount > 0 ? styles.positive : styles.negative]}
-          name={item.amount > 0 ? 'plus' : 'minus'}>
-          {Math.abs(item.amount)}
-        </Feather>
-      </ListItem.Part>
-    </ListItem>
+    <List.Item
+      title={item.title}
+      description={item.description}
+      left={({ color, style }) =>
+        TransactionIcon({ item, size: 40, style, color })
+      }
+      right={({ style }) => TransactionListItemRight({ item, style })}
+      onPress={onPress}
+    />
+  );
+}
+
+function TransactionListItemRight({
+  item,
+  style,
+}: {
+  item: Transaction;
+  style: StyleProp<TextStyle>;
+}) {
+  return (
+    <Text
+      // name={item.amount > 0 ? 'plus' : 'minus'}
+      style={[style, item.amount > 0 ? styles.positive : styles.negative]}>
+      {item.amount >= 0 ? '+' : '-'}
+      {Math.abs(item.amount)}
+    </Text>
   );
 }
 
 const styles = StyleSheet.create({
-  rightAlign: {
-    textAlign: 'right',
-  },
   negative: {
     color: 'red',
   },
@@ -46,8 +55,5 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: 'black',
-  },
-  listItem: {
-    marginLeft: 16,
   },
 });

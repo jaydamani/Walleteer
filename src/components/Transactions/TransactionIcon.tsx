@@ -1,11 +1,22 @@
 import { Transaction } from '@database';
-import { Avatar, AvatarProps } from 'react-native-ui-lib';
+import {
+  Avatar,
+  AvatarIconProps,
+  AvatarImageProps,
+  AvatarTextProps,
+} from 'react-native-paper';
 
-export const TransactionIcon = ({
-  transaction,
-  ...props
-}: {
-  transaction: Transaction;
-} & AvatarProps) => {
-  return <Avatar {...props} label={transaction.category.id} />;
+export type IconProps = Partial<
+  AvatarIconProps | AvatarImageProps | AvatarTextProps
+> & {
+  item: Transaction;
 };
+
+export function TransactionIcon({ item, ...props }: IconProps) {
+  return item.icon ? (
+    <Avatar.Icon {...props} icon={item.icon} />
+  ) : (
+    // color should be applied only for icons
+    <Avatar.Text {...props} color={undefined} label={item.category.id} />
+  );
+}

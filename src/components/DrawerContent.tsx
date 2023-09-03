@@ -3,7 +3,7 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import { StyleSheet } from 'react-native';
-import { View } from 'react-native-ui-lib';
+import { View } from 'react-native';
 
 export function DrawerContent({
   state,
