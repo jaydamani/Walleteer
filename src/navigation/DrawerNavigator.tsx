@@ -1,4 +1,4 @@
-import { DrawerContent } from '@Components';
+import { DrawerContent } from './DrawerContent';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Home, homeScreenOptions } from '@Screens/Home';
 
