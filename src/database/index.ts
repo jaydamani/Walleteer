@@ -3,7 +3,7 @@ import { Database } from '@nozbe/watermelondb';
 
 import adapter from './adapters';
 import { createCategories } from './init';
-import { Transaction } from './model/transaction.js';
+import { Transaction } from './model/transaction';
 
 export const database = new Database({
   adapter,
