@@ -1,12 +1,12 @@
 import { Screens } from '@Navigation/RootNavigator';
 import { transactions } from '@database';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-native-ui-lib';
 import NotLoaded from './NotLoaded';
 
-type Props = StackScreenProps<Screens, 'transactionForm'>;
+type Props = NativeStackScreenProps<Screens, 'transactionForm'>;
 export function getTransactionFormOptions({
   navigation,
   route,

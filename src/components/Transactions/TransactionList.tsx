@@ -23,19 +23,17 @@ export function TransactionList({ queries = [] }: TransactionListProps) {
       .fetch()
       .then(ungroupedList => {
         const sections: GroupedTransactionListItem[] = [];
-        if (ungroupedList.length) {
-          let lastTitle;
-          for (const t of ungroupedList) {
-            const title = t.date.toLocaleString('default', {
-              month: 'short',
-              year: 'numeric',
-            });
-            if (title !== lastTitle) {
-              sections.push({ title, data: [] });
-              lastTitle = title;
-            }
-            sections[sections.length - 1].data.push(t);
+        let lastTitle;
+        for (const t of ungroupedList) {
+          const title = t.date.toLocaleString('default', {
+            month: 'short',
+            year: 'numeric',
+          });
+          if (title !== lastTitle) {
+            sections.push({ title, data: [] });
+            lastTitle = title;
           }
+          sections[sections.length - 1].data.push(t);
         }
         return sections;
       })
