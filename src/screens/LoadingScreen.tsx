@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-export default function NotLoaded() {
+export default function LoadingScreen() {
   return (
     <View style={[styles.container, StyleSheet.absoluteFill]}>
       <ActivityIndicator animating size="large" />
