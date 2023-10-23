@@ -1,42 +1,23 @@
 import { Transaction } from '@database';
-import {
-  ListRenderItemInfo,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { TransactionIcon } from './TransactionIcon';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Screens } from '@Navigation/RootNavigator';
-import { List, Text } from 'react-native-paper';
+import { List, ListItemProps, Text } from 'react-native-paper';
+import { ListRenderItemInfo } from '@shopify/flash-list';
+import withObservables from '@nozbe/with-observables';
 
-export function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
+function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
   const navigation = useNavigation<NavigationProp<Screens>>();
   function onPress() {
     return navigation.navigate('transactionForm', { transaction: item.id });
   }
 
-  return (
-    <List.Item
-      title={item.title}
-      description={item.description}
-      left={({ color, style }) =>
-        TransactionIcon({ item, size: 40, style, color })
-      }
-      right={({ style }) => TransactionListItemRight({ item, style })}
-      onPress={onPress}
-    />
+  const renderLeft: ListItemProps['left'] = ({ color, style }) => (
+    <TransactionIcon item={item} size={40} style={style} color={color} />
   );
-}
 
-function TransactionListItemRight({
-  item,
-  style,
-}: {
-  item: Transaction;
-  style: StyleProp<TextStyle>;
-}) {
-  return (
+  const renderRight: ListItemProps['right'] = ({ style }) => (
     <Text
       // name={item.amount > 0 ? 'plus' : 'minus'}
       style={[style, item.amount > 0 ? styles.positive : styles.negative]}>
@@ -44,7 +25,26 @@ function TransactionListItemRight({
       {Math.abs(item.amount)}
     </Text>
   );
+  return (
+    <List.Item
+      title={item.title}
+      description={item.description}
+      left={renderLeft}
+      right={renderRight}
+      onPress={onPress}
+    />
+  );
 }
+
+const enhance = withObservables(
+  ['item'],
+  ({ item }: ListRenderItemInfo<Transaction>) => {
+    return { item };
+  },
+);
+
+const enhancedTransactionList = enhance(TransactionListItem);
+export { enhancedTransactionList as TransactionListItem };
 
 const styles = StyleSheet.create({
   negative: {

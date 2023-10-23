@@ -1,59 +1,63 @@
 import { Transaction, transactions } from '@database';
 import { Q } from '@nozbe/watermelondb';
-import { SectionList, Dimensions } from 'react-native';
-
-import { useEffect, useState } from 'react';
+import { FlashList, FlashListProps } from '@shopify/flash-list';
+import withObservables from '@nozbe/with-observables';
 import { TransactionListItem } from './TransactionListItem';
 import { List } from 'react-native-paper';
 
-export interface TransactionListProps {
-  queries?: Q.Clause[];
+type GroupedTransactionListItem = string | Transaction;
+export interface TransactionListProps
+  extends Omit<FlashListProps<GroupedTransactionListItem>, 'data'> {
+  queries: Q.Clause[];
 }
-
-interface GroupedTransactionListItem {
-  title: string;
+export interface EnhancedTransactionListProps extends TransactionListProps {
   data: Transaction[];
+  // count: number;
 }
 
-export function TransactionList({ queries = [] }: TransactionListProps) {
-  const [list, setList] = useState<GroupedTransactionListItem[]>([]);
-  useEffect(() => {
-    transactions
-      .query(Q.sortBy('done_at', Q.desc), ...queries)
-      .fetch()
-      .then(ungroupedList => {
-        const sections: GroupedTransactionListItem[] = [];
-        let lastTitle;
-        for (const t of ungroupedList) {
-          const title = t.date.toLocaleString('default', {
-            month: 'short',
-            year: 'numeric',
-          });
-          if (title !== lastTitle) {
-            sections.push({ title, data: [] });
-            lastTitle = title;
-          }
-          sections[sections.length - 1].data.push(t);
-        }
-        return sections;
-      })
-      .then(setList);
-  }, [queries]);
-
+function TransactionList(listProps: EnhancedTransactionListProps) {
+  const data: GroupedTransactionListItem[] = [];
+  let lastTitle: string = '';
+  for (const t of listProps.data) {
+    let title = t.date.toLocaleDateString('default', {
+      month: 'short',
+      year: 'numeric',
+    });
+    if (lastTitle !== title) {
+      data.push(title);
+      lastTitle = title;
+    }
+    data.push(t);
+  }
   return (
-    <SectionList
-      sections={list}
+    <FlashList
+      {...listProps}
+      data={data}
       // stickySectionHeadersEnabled
-      keyExtractor={t => t.id}
-      renderSectionHeader={({ section }) => (
-        <List.Subheader>{section.title}</List.Subheader>
-      )}
-      renderItem={TransactionListItem}
-      getItemLayout={(_, index) => ({
-        index,
-        length: Dimensions.get('screen').width,
-        offset: 72 * index,
-      })}
+      renderItem={({ item, ...props }) => {
+        return typeof item === 'string' ? (
+          <List.Subheader>{item}</List.Subheader>
+        ) : (
+          <TransactionListItem item={item} {...props} />
+        );
+      }}
+      estimatedItemSize={68}
+      // getItemType={item => {
+      //   // To achieve better performance, specify the type based on the item
+      //   return typeof item === 'string' ? 'sectionHeader' : 'row';
+      // }}
     />
   );
 }
+
+const enhance = withObservables(
+  ['queries'],
+  ({ queries }: TransactionListProps) => {
+    queries.push(Q.sortBy('done_at', Q.desc));
+    const data = transactions.query(...queries);
+    return { data };
+  },
+);
+
+const enhancedTransactionList = enhance(TransactionList);
+export { enhancedTransactionList as TransactionList };

@@ -19,7 +19,7 @@ export function Home({ navigation }: DrawerScreenProps<Screens, 'Home'>) {
   }
   return (
     <View style={styles.container}>
-      <TransactionList />
+      <TransactionList queries={[]} />
       <FAB icon="plus" onPress={createTransaction} style={styles.FAB} />
     </View>
   );
