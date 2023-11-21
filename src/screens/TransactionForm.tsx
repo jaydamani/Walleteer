@@ -1,21 +1,28 @@
 import { Screens } from '@Navigation/RootNavigator';
-import { Category, database, Transaction, transactions } from '@database';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationOptions,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, ButtonProps } from 'react-native-paper';
-import LoadingScreen from './LoadingScreen';
-import { View } from 'react-native';
-import { CurrencyInput, TextInput } from '@Components';
+import {
+  CurrencyInput,
+  DateInput,
+  TextInput,
+  LoadingScreen,
+} from '@Components';
+import { Category, database, Transaction, transactions } from '@database';
 import { CategoryID } from '@lib/constants';
+import { ScrollView } from 'react-native';
 
 type Props = NativeStackScreenProps<Screens, 'transactionForm'>;
 interface ITransactionForm {
   title: string;
-  amount: number;
+  amount: string;
   date: Date;
   categoryID: Category['id'];
+  time: { hours: number; minutes: number };
 }
 
 export function getTransactionFormOptions({
@@ -47,29 +54,34 @@ export function TransactionForm({ route, navigation }: Props) {
     if (!transactionID)
       return {
         title: 'T',
-        amount: 0,
+        amount: '0',
         date: d, //new Date(),
         categoryID: CategoryID.TEST,
+        time: { hours: 0, minutes: 0 },
       };
     return transactions.find(transactionID).then(t => ({
       transactionID,
       title: t.title,
-      amount: t.amount,
+      amount: t.amount.toString(),
       date: t.date,
       categoryID: t.category.id,
+      time: { hours: t.date.getHours(), minutes: t.date.getMinutes() },
     }));
   }
 
-  const { control, formState, handleSubmit } = useForm<ITransactionForm>({
-    defaultValues,
-  });
+  const { control, formState, handleSubmit, setError } =
+    useForm<ITransactionForm>({
+      defaultValues,
+    });
 
   useEffect(() => {
     async function submitData(formData: ITransactionForm) {
       function updateTransaction(t: Transaction) {
         t.title = formData.title;
         t.category.id = formData.categoryID;
-        t.amount = formData.amount;
+        t.amount = +formData.amount;
+        formData.date.setHours(formData.time.hours);
+        formData.date.setMinutes(formData.time.minutes);
         t.date = formData.date;
       }
       await database.write(async () => {
@@ -89,10 +101,11 @@ export function TransactionForm({ route, navigation }: Props) {
         }),
     });
   }, [navigation, handleSubmit, transactionID]);
-  return formState.isLoading ? (
-    <LoadingScreen />
-  ) : (
-    <View>
+
+  if (formState.isLoading) return <LoadingScreen />;
+
+  return (
+    <ScrollView>
       <TextInput<ITransactionForm, 'title'>
         control={control}
         label="Title"
@@ -102,7 +115,6 @@ export function TransactionForm({ route, navigation }: Props) {
         }}
       />
       <CurrencyInput<ITransactionForm, 'amount'>
-        format={f.format}
         control={control}
         label="Amount"
         name="amount"
@@ -110,11 +122,18 @@ export function TransactionForm({ route, navigation }: Props) {
           required: 'WTF?',
         }}
       />
-    </View>
+      <DateInput<ITransactionForm, 'date'>
+        control={control}
+        name="date"
+        label="Transaction date"
+        rules={{ required: true }}
+        setError={setError}
+      />
+      {/* <TimeInput<ITransactionForm, 'time'>
+        name="time"
+        control={control}
+        rules={{ required: true }}
+      /> */}
+    </ScrollView>
   );
 }
-
-const f = new Intl.NumberFormat('en-IN', {
-  style: 'currency',
-  currency: 'INR',
-});
