@@ -4,7 +4,7 @@ import { setupDB } from '@database';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import LoadingScreen from './screens/LoadingScreen';
+import { LoadingScreen } from '@Components';
 import { PaperProvider, Text } from 'react-native-paper';
 
 export function App() {
