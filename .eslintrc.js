@@ -1,10 +1,5 @@
 module.exports = {
-  overrides: [
-    {
-      files: ['*.js'],
-      // parser: '@babel/eslint-parser',
-    },
-  ],
+  overrides: [],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': 'warn',
