@@ -1,7 +1,7 @@
-import { Transaction, transactions } from '@database';
+import { Transaction, db } from '@database';
 import { Q } from '@nozbe/watermelondb';
 import { FlashList, FlashListProps } from '@shopify/flash-list';
-import withObservables from '@nozbe/with-observables';
+import { withObservables } from '@nozbe/watermelondb/react';
 import { TransactionListItem } from './TransactionListItem';
 import { List } from 'react-native-paper';
 
@@ -54,7 +54,7 @@ const enhance = withObservables(
   ['queries'],
   ({ queries }: TransactionListProps) => {
     queries.push(Q.sortBy('done_at', Q.desc));
-    const data = transactions.query(...queries);
+    const data = db.transactions.query(...queries);
     return { data };
   },
 );

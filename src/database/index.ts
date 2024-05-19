@@ -1,25 +1,14 @@
-import { Category } from '@models/categories';
-import { Database } from '@nozbe/watermelondb';
-
+import { Category } from './model/categories';
 import adapter from './adapters';
-import { createCategories } from './init';
+import { Database } from './model/database';
 import { Transaction } from './model/transaction';
+import { firstSync } from './data';
 
-export const database = new Database({
+export const db = new Database({
   adapter,
   modelClasses: [Transaction, Category],
 });
+firstSync(db);
 
-export function setupDB() {
-  return database.write(async () => {
-    try {
-      await createCategories();
-    } catch (error) {
-      throw error;
-    }
-  });
-}
 export { Transaction } from './model/transaction';
-export const transactions = database.get<Transaction>('transactions');
 export { Category } from './model/categories';
-export const categories = database.get<Category>('categories');

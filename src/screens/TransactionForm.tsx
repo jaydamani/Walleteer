@@ -12,7 +12,7 @@ import {
   TextInput,
   LoadingScreen,
 } from '@Components';
-import { Category, database, Transaction, transactions } from '@database';
+import { Category, db, Transaction } from '@database';
 import { CategoryID } from '@lib/constants';
 import { ScrollView } from 'react-native';
 
@@ -50,7 +50,7 @@ export function TransactionForm({ route, navigation }: Props) {
     const d = new Date();
     d.setMonth(Math.random() * 11);
     d.setDate(Math.random() * 28);
-
+    console.log(await db.categories.query().fetchCount());
     if (!transactionID)
       return {
         title: 'T',
@@ -59,7 +59,7 @@ export function TransactionForm({ route, navigation }: Props) {
         categoryID: CategoryID.TEST,
         time: { hours: 0, minutes: 0 },
       };
-    return transactions.find(transactionID).then(t => ({
+    return db.transactions.find(transactionID).then(t => ({
       transactionID,
       title: t.title,
       amount: t.amount.toString(),
@@ -84,12 +84,12 @@ export function TransactionForm({ route, navigation }: Props) {
         formData.date.setMinutes(formData.time.minutes);
         t.date = formData.date;
       }
-      await database.write(async () => {
+      await db.write(async () => {
         if (transactionID) {
-          let transaction = await transactions.find(transactionID);
+          let transaction = await db.transactions.find(transactionID);
           await transaction.update(updateTransaction);
         } else {
-          await transactions.create(updateTransaction);
+          await db.transactions.create(updateTransaction);
         }
       });
       navigation.goBack();

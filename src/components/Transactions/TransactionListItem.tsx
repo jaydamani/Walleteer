@@ -5,7 +5,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Screens } from '@Navigation/RootNavigator';
 import { List, ListItemProps, Text } from 'react-native-paper';
 import { ListRenderItemInfo } from '@shopify/flash-list';
-import withObservables from '@nozbe/with-observables';
+import { withObservables } from '@nozbe/watermelondb/react';
 
 function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
   const navigation = useNavigation<NavigationProp<Screens>>();
