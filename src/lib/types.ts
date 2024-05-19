@@ -1,3 +1,4 @@
+import { ColumnSchema } from '@nozbe/watermelondb';
 import { PossibleInputTypes } from 'react-native-paper-dates/lib/typescript/Time/timeUtils';
 
 export type { DatePickerInputProps } from 'react-native-paper-dates/lib/typescript/Date/DatePickerInput.shared';
@@ -19,3 +20,7 @@ export type TimePickerProps = {
   inputFontSize?: number;
   defaultInputType?: PossibleInputTypes;
 };
+
+export type ColumnList<T> = (ColumnSchema & {
+  name: keyof T;
+})[];
