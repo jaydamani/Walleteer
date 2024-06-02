@@ -26,6 +26,7 @@ export function DateInput<
     <>
       <DatePickerInput
         inputMode="start"
+        mode='outlined'
         locale="en"
         onValidationError={message =>
           message && setError(props.name, { message })

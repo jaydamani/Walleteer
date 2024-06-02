@@ -30,6 +30,7 @@ export function TextInput<
   return (
     <>
       <RNPTextInput
+        mode='outlined'
         onChangeText={val => onChange(parse(val))}
         value={format(value)}
         {...field}

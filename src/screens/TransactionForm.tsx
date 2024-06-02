@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, ButtonProps } from 'react-native-paper';
+import { Button, ButtonProps, FAB } from 'react-native-paper';
 import {
   CurrencyInput,
   DateInput,
@@ -14,7 +14,7 @@ import {
 } from '@Components';
 import { Category, db, Transaction } from '@database';
 import { CategoryID } from '@lib/constants';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 type Props = NativeStackScreenProps<Screens, 'transactionForm'>;
 interface ITransactionForm {
@@ -29,19 +29,10 @@ export function getTransactionFormOptions({
   route,
 }: Props): NativeStackNavigationOptions {
   return {
-    headerRight: () => HeaderRight({ disabled: true }),
     headerTitle: route.params.id
       ? 'Edit Transaction'
       : 'New Transaction',
   };
-}
-
-function HeaderRight(props: Omit<ButtonProps, 'children'>) {
-  return (
-    <Button elevation={2} {...props} mode="elevated">
-      Save
-    </Button>
-  );
 }
 
 export function TransactionForm({ route, navigation }: Props) {
@@ -50,7 +41,7 @@ export function TransactionForm({ route, navigation }: Props) {
     const d = new Date();
     d.setMonth(Math.random() * 11);
     d.setDate(Math.random() * 28);
-    console.log(await db.categories.query().fetchCount());
+
     if (!transactionID)
       return {
         title: 'T',
@@ -74,66 +65,77 @@ export function TransactionForm({ route, navigation }: Props) {
       defaultValues,
     });
 
-  useEffect(() => {
-    async function submitData(formData: ITransactionForm) {
-      function updateTransaction(t: Transaction) {
-        t.title = formData.title;
-        t.category.id = formData.categoryID;
-        t.amount = +formData.amount;
-        formData.date.setHours(formData.time.hours);
-        formData.date.setMinutes(formData.time.minutes);
-        t.date = formData.date;
-      }
-      await db.write(async () => {
-        if (transactionID) {
-          let transaction = await db.transactions.find(transactionID);
-          await transaction.update(updateTransaction);
-        } else {
-          await db.transactions.create(updateTransaction);
-        }
-      });
-      navigation.goBack();
+  async function submitData(formData: ITransactionForm) {
+    function updateTransaction(t: Transaction) {
+      t.title = formData.title;
+      t.category.id = formData.categoryID;
+      t.amount = +formData.amount;
+      formData.date.setHours(formData.time.hours);
+      formData.date.setMinutes(formData.time.minutes);
+      t.date = formData.date;
     }
-    navigation.setOptions({
-      headerRight: () =>
-        HeaderRight({
-          onPress: handleSubmit(submitData),
-        }),
+    await db.write(async () => {
+      if (transactionID) {
+        let transaction = await db.transactions.find(transactionID);
+        await transaction.update(updateTransaction);
+      } else {
+        await db.transactions.create(updateTransaction);
+      }
     });
-  }, [navigation, handleSubmit, transactionID]);
+    navigation.goBack();
+  }
 
   if (formState.isLoading) return <LoadingScreen />;
 
   return (
-    <ScrollView>
-      <TextInput<ITransactionForm, 'title'>
-        control={control}
-        label="Title"
-        name="title"
-        rules={{
-          required: 'This is actually required.',
-        }}
-      />
-      <CurrencyInput<ITransactionForm, 'amount'>
-        control={control}
-        label="Amount"
-        name="amount"
-        rules={{
-          required: 'WTF?',
-        }}
-      />
-      <DateInput<ITransactionForm, 'date'>
-        control={control}
-        name="date"
-        label="Transaction date"
-        rules={{ required: true }}
-        setError={setError}
-      />
-      {/* <TimeInput<ITransactionForm, 'time'>
+    <View style={styles.container}>
+      <ScrollView>
+        <TextInput<ITransactionForm, 'title'>
+          style={styles.input}
+          control={control}
+          label="Title"
+          name="title"
+          rules={{
+            required: 'This is actually required.',
+          }}
+        />
+        <CurrencyInput<ITransactionForm, 'amount'>
+          style={styles.input}
+          control={control}
+          label="Amount"
+          name="amount"
+          rules={{
+            required: 'WTF?',
+          }}
+        />
+        <DateInput<ITransactionForm, 'date'>
+          style={styles.input}
+          control={control}
+          name="date"
+          label="Transaction date"
+          rules={{ required: true }}
+          setError={setError}
+        />
+        {/* <TimeInput<ITransactionForm, 'time'>
         name="time"
         control={control}
         rules={{ required: true }}
-      /> */}
-    </ScrollView>
+        /> */}
+      </ScrollView>
+      <Button mode='contained' onPress={handleSubmit(submitData)} style={styles.save} >Save</Button>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    marginVertical: 8,
+  },
+  save: {
+    margin: 16
+  },
+  container: {
+    flex: 1,
+    margin: 16
+  }
+});
