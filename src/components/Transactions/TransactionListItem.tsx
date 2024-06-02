@@ -10,7 +10,7 @@ import { withObservables } from '@nozbe/watermelondb/react';
 function TransactionListItem({ item }: ListRenderItemInfo<Transaction>) {
   const navigation = useNavigation<NavigationProp<Screens>>();
   function onPress() {
-    return navigation.navigate('transactionForm', { transaction: item.id });
+    return navigation.navigate('transactionForm', { id: item.id });
   }
 
   const renderLeft: ListItemProps['left'] = ({ color, style }) => (

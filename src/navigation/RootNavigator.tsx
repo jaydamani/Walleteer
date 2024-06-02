@@ -31,7 +31,7 @@ export default function RootNavigator() {
 
 export type RootScreens = {
   transactionForm: {
-    transaction?: string;
+    id?: string;
   };
   root: undefined;
 };

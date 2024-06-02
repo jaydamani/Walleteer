@@ -30,7 +30,7 @@ export function getTransactionFormOptions({
 }: Props): NativeStackNavigationOptions {
   return {
     headerRight: () => HeaderRight({ disabled: true }),
-    headerTitle: route.params.transaction
+    headerTitle: route.params.id
       ? 'Edit Transaction'
       : 'New Transaction',
   };
@@ -45,7 +45,7 @@ function HeaderRight(props: Omit<ButtonProps, 'children'>) {
 }
 
 export function TransactionForm({ route, navigation }: Props) {
-  const transactionID = route.params.transaction;
+  const transactionID = route.params.id;
   async function defaultValues(): Promise<ITransactionForm> {
     const d = new Date();
     d.setMonth(Math.random() * 11);
