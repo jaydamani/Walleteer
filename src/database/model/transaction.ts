@@ -5,7 +5,7 @@ import { ColumnList } from '@lib/types';
 
 export enum TransactionType {
   INCOME,
-  EXPENSE
+  EXPENSE,
 }
 
 export interface transactionSChema {
@@ -24,7 +24,7 @@ const columns: ColumnList<transactionSChema> = [
   { name: 'icon', type: 'string' },
   { name: 'category_id', type: 'string' },
   { name: 'type', type: 'string' },
-]
+];
 
 export const TransactionSchema = tableSchema({
   name: 'transactions',

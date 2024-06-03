@@ -1,7 +1,6 @@
 import { categories } from './categories';
 import { Database } from '@nozbe/watermelondb';
 import { SyncDatabaseChangeSet, synchronize } from '@nozbe/watermelondb/sync';
-import { tr } from 'react-native-paper-dates';
 
 const data: SyncDatabaseChangeSet = {
   categories: {
@@ -13,7 +12,7 @@ const data: SyncDatabaseChangeSet = {
     created: [],
     updated: [],
     deleted: [],
-  }
+  },
 };
 
 export function firstSync(database: Database) {

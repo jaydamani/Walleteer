@@ -55,6 +55,5 @@ export const categories: CategorySchema[] = [
     id: 'entertainment',
     title: 'Entertainment',
     type: CategoryType.EXPENSE,
-  }
-
+  },
 ];
