@@ -3,9 +3,9 @@ import {
   NativeStackNavigationOptions,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, ButtonProps, FAB } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import {
   CurrencyInput,
   DateInput,
@@ -29,15 +29,14 @@ export function getTransactionFormOptions({
   route,
 }: Props): NativeStackNavigationOptions {
   return {
-    headerTitle: route.params.id
-      ? 'Edit Transaction'
-      : 'New Transaction',
+    headerTitle: route.params.id ? 'Edit Transaction' : 'New Transaction',
   };
 }
 
 export function TransactionForm({ route, navigation }: Props) {
   const transactionID = route.params.id;
-  async function defaultValues(): Promise<ITransactionForm> {
+
+  const defaultValues = useCallback(async (): Promise<ITransactionForm> => {
     const d = new Date();
     d.setMonth(Math.random() * 11);
     d.setDate(Math.random() * 28);
@@ -58,32 +57,35 @@ export function TransactionForm({ route, navigation }: Props) {
       categoryID: t.category.id,
       time: { hours: t.date.getHours(), minutes: t.date.getMinutes() },
     }));
-  }
+  }, [transactionID]);
 
   const { control, formState, handleSubmit, setError } =
     useForm<ITransactionForm>({
       defaultValues,
     });
 
-  async function submitData(formData: ITransactionForm) {
-    function updateTransaction(t: Transaction) {
-      t.title = formData.title;
-      t.category.id = formData.categoryID;
-      t.amount = +formData.amount;
-      formData.date.setHours(formData.time.hours);
-      formData.date.setMinutes(formData.time.minutes);
-      t.date = formData.date;
-    }
-    await db.write(async () => {
-      if (transactionID) {
-        let transaction = await db.transactions.find(transactionID);
-        await transaction.update(updateTransaction);
-      } else {
-        await db.transactions.create(updateTransaction);
+  const submitData = useCallback(
+    async (formData: ITransactionForm) => {
+      function updateTransaction(t: Transaction) {
+        t.title = formData.title;
+        t.category.id = formData.categoryID;
+        t.amount = +formData.amount;
+        formData.date.setHours(formData.time.hours);
+        formData.date.setMinutes(formData.time.minutes);
+        t.date = formData.date;
       }
-    });
-    navigation.goBack();
-  }
+      await db.write(async () => {
+        if (transactionID) {
+          let transaction = await db.transactions.find(transactionID);
+          await transaction.update(updateTransaction);
+        } else {
+          await db.transactions.create(updateTransaction);
+        }
+      });
+      navigation.goBack();
+    },
+    [navigation, transactionID],
+  );
 
   if (formState.isLoading) return <LoadingScreen />;
 
@@ -116,13 +118,13 @@ export function TransactionForm({ route, navigation }: Props) {
           rules={{ required: true }}
           setError={setError}
         />
-        {/* <TimeInput<ITransactionForm, 'time'>
-        name="time"
-        control={control}
-        rules={{ required: true }}
-        /> */}
       </ScrollView>
-      <Button mode='contained' onPress={handleSubmit(submitData)} style={styles.save} >Save</Button>
+      <Button
+        mode="contained"
+        onPress={handleSubmit(submitData)}
+        style={styles.save}>
+        Save
+      </Button>
     </View>
   );
 }
@@ -132,10 +134,10 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   save: {
-    margin: 16
+    margin: 16,
   },
   container: {
     flex: 1,
-    margin: 16
-  }
+    margin: 16,
+  },
 });
