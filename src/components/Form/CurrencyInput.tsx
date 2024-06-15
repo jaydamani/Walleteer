@@ -22,7 +22,7 @@ export function CurrencyInput<
           .replaceAll(/(\.\d{2}).+/g, '$1') || '0'
       }
       format={formatCurrencyInput}
-      keyboardType="decimal-pad"
+      inputMode="numeric"
       {...props}
     />
   );
